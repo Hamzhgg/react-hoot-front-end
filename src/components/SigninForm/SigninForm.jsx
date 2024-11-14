@@ -1,11 +1,9 @@
-// SigninForm
-
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import * as authService from '../../services/authService'; // import the authservice
+import * as authService from '../../services/authService';
 
 const SigninForm = (props) => {
-  const navigate = useNavigate(); // added this for navigation purposes
+  const navigate = useNavigate();
   const [message, setMessage] = useState(['']);
   const [formData, setFormData] = useState({
     username: '',
@@ -24,8 +22,8 @@ const SigninForm = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const user = await authService.signin(formData); // TODO build signin service function
-
+      const user = await authService.signin(formData);
+      console.log(user);
       props.setUser(user);
       navigate('/');
     } catch (err) {
