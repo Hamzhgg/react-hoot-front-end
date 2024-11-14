@@ -38,6 +38,12 @@ const App = () => {
     navigate('/hoots')
   }
 
+  const handleDeleteHoot = async (hootId) => {
+    const deletedHoot = await hootService.deleteHoot(hootId)
+    setHoots(hoots.filter(hoot => hoot._id !== deletedHoot._id))
+    navigate('/hoots')
+  }
+
   return (
     <>
       <AuthedUserContext.Provider value={user}>
@@ -47,8 +53,9 @@ const App = () => {
             <>
               <Route path="/" element={<Dashboard user={user} />} />
               <Route path="/hoots" element={<HootList hoots={hoots} />} />
-              <Route path="/hoots/:hootId" element={<HootDetails />} />
+              <Route path="/hoots/:hootId" element={<HootDetails handleDeleteHoot={handleDeleteHoot} />} />
               <Route path="/hoots/new" element={<HootForm handleAddHoot={handleAddHoot} />} />
+              <Route path="/hoots/:hootId/edit" element={<HootForm />} />
             </>
           ) : (
             <Route path="/" element={<Landing />} />

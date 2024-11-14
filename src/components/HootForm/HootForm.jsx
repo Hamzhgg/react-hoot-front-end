@@ -1,17 +1,20 @@
 import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 
-const HootForm = (props) => {
+const HootForm = props => {
   const [formData, setFormData] = useState({
     title: '',
     text: '',
     category: 'News',
   })
 
-  const handleChange = (event) => {
-    setFormData({...formData, [event.target.name]: event.target.value})
+  const { hootId } = useParams()
+
+  const handleChange = event => {
+    setFormData({ ...formData, [event.target.name]: event.target.value })
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = event => {
     event.preventDefault()
     props.handleAddHoot(formData)
   }
@@ -19,6 +22,7 @@ const HootForm = (props) => {
   return (
     <main>
       <form onSubmit={handleSubmit}>
+        <h1>{hootId ? 'Edit Hoot' : 'New Hoot'}</h1>
         <label htmlFor="title-input">Title</label>
         <input
           type="text"

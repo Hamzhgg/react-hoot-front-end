@@ -1,11 +1,13 @@
-import { useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useParams, Link } from 'react-router-dom'
+import { useEffect, useState, useContext } from 'react'
 import * as hootService from '../../services/hootService'
 import Loading from '../Loading/Loading'
 import CommentForm from '../CommentForm/CommentForm'
+import { AuthedUserContext } from '../../App'
 
 const HootDetails = props => {
   const { hootId } = useParams()
+  const user = useContext(AuthedUserContext)
 
   const [hoot, setHoot] = useState(null)
 
@@ -17,9 +19,9 @@ const HootDetails = props => {
     fetchHoot()
   }, [hootId])
 
-  const handleAddComment = async (commentFormData) => {
+  const handleAddComment = async commentFormData => {
     const newComment = await hootService.createComment(hootId, commentFormData)
-    setHoot({...hoot, comments: [...hoot.comments, newComment]})
+    setHoot({ ...hoot, comments: [...hoot.comments, newComment] })
   }
 
   if (!hoot) return <Loading />
@@ -33,6 +35,14 @@ const HootDetails = props => {
           {hoot.author.username} posted on{' '}
           {new Date(hoot.createdAt).toLocaleDateString()}
         </p>
+        {hoot.author._id === user._id && (
+          <>
+            <Link to={`/hoots/${hootId}/edit`}>EDIT</Link>
+            <button onClick={() => props.handleDeleteHoot(hootId)}>
+              DELETE
+            </button>
+          </>
+        )}
       </header>
       <p>{hoot.text}</p>
       <section>
